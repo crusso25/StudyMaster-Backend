@@ -27,45 +27,38 @@ public class UserClassController {
 
     @GetMapping("userclasses")
     public ResponseEntity<UserClassResponse> getUserClasses(
-        @PathVariable("userId") int userId,
-        @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-        @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize
-    ) {
-        return new ResponseEntity<>(userClassService.getAllUserClasses(userId, pageNo, pageSize), HttpStatus.OK);
+            @PathVariable("userId") int userId) {
+        return new ResponseEntity<>(userClassService.getAllUserClasses(userId), HttpStatus.OK);
     }
 
     @GetMapping("userclasses/{classId}")
     public ResponseEntity<UserClassDto> getUserClass(
-        @PathVariable("userId") int userId,
-        @PathVariable("classId") int classId
-    ) {
+            @PathVariable("userId") int userId,
+            @PathVariable("classId") int classId) {
         return ResponseEntity.ok(userClassService.getUserClassById(userId, classId));
     }
 
     @PostMapping("userclasses")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserClassDto> createUserClass(
-        @PathVariable("userId") int userId,
-        @RequestBody UserClassDto userClassDto
-    ) {
+            @PathVariable("userId") int userId,
+            @RequestBody UserClassDto userClassDto) {
         return new ResponseEntity<>(userClassService.createUserClass(userId, userClassDto), HttpStatus.CREATED);
     }
 
     @PutMapping("userclasses/{classId}")
     public ResponseEntity<UserClassDto> updateUserClass(
-        @PathVariable("userId") int userId,
-        @RequestBody UserClassDto userClassDto,
-        @PathVariable("classId") int classId
-    ) {
+            @PathVariable("userId") int userId,
+            @RequestBody UserClassDto userClassDto,
+            @PathVariable("classId") int classId) {
         UserClassDto response = userClassService.updateUserClass(userId, userClassDto, classId);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @DeleteMapping("userclasses/{classId}")
     public ResponseEntity<String> deleteUserClass(
-        @PathVariable("userId") int userId,
-        @PathVariable("classId") int classId
-    ) {
+            @PathVariable("userId") int userId,
+            @PathVariable("classId") int classId) {
         userClassService.deleteUserClass(userId, classId);
         return new ResponseEntity<>("Class successfully deleted", HttpStatus.OK);
     }

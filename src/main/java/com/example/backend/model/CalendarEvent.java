@@ -14,11 +14,14 @@ public class CalendarEvent {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String className;
-    private String classContent;
+    private String content;
     private String endDate;
     private String startDate;
     private String title;
     private String type;
+    private Boolean contentGenerated;
+    private String practiceProblems;
+    private String examFor;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

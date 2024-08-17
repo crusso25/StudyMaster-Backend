@@ -27,20 +27,13 @@ public class CalendarEventServiceImpl implements CalendarEventService {
     @Autowired
     private UserRepository userRepository;
 
-    public CalendarEventResponse getAllCalendarEvents(int userId, int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<CalendarEvent> calendarEventPage = calendarEventRepository.findByUserId(userId, pageable);
-        List<CalendarEventDto> content = calendarEventPage.getContent().stream().map(this::mapToDto).collect(Collectors.toList());
+    public CalendarEventResponse getAllCalendarEvents(int userId) {
+        List<CalendarEvent> events = calendarEventRepository.findByUserId(userId);
+        List<CalendarEventDto> eventDtos = events.stream()
+                .map(this::mapToDto)
+                .collect(Collectors.toList());
 
-        CalendarEventResponse calendarEventResponse = new CalendarEventResponse();
-        calendarEventResponse.setContent(content);
-        calendarEventResponse.setPageNo(calendarEventPage.getNumber());
-        calendarEventResponse.setPageSize(calendarEventPage.getSize());
-        calendarEventResponse.setTotalElements(calendarEventPage.getTotalElements());
-        calendarEventResponse.setTotalPages(calendarEventPage.getTotalPages());
-        calendarEventResponse.setLast(calendarEventPage.isLast());
-
-        return calendarEventResponse;
+        return new CalendarEventResponse(eventDtos);
     }
 
     public CalendarEventDto getCalendarEventById(int userId, int id) {
@@ -64,9 +57,12 @@ public class CalendarEventServiceImpl implements CalendarEventService {
         calendarEvent.setTitle(calendarEventDto.getTitle());
         calendarEvent.setStartDate(calendarEventDto.getStartDate());
         calendarEvent.setEndDate(calendarEventDto.getEndDate());
-        calendarEvent.setClassContent(calendarEventDto.getClassContent());
+        calendarEvent.setContent(calendarEventDto.getContent());
         calendarEvent.setClassName(calendarEventDto.getClassName());
         calendarEvent.setType(calendarEventDto.getType());
+        calendarEvent.setContentGenerated(calendarEventDto.getContentGenerated());
+        calendarEvent.setPracticeProblems(calendarEventDto.getPracticeProblems());
+        calendarEvent.setExamFor(calendarEventDto.getExamFor());
         CalendarEvent updatedCalendarEvent = calendarEventRepository.save(calendarEvent);
         return mapToDto(updatedCalendarEvent);
     }
@@ -83,9 +79,12 @@ public class CalendarEventServiceImpl implements CalendarEventService {
         dto.setTitle(calendarEvent.getTitle());
         dto.setStartDate(calendarEvent.getStartDate());
         dto.setEndDate(calendarEvent.getEndDate());
-        dto.setClassContent(calendarEvent.getClassContent());
+        dto.setContent(calendarEvent.getContent());
         dto.setClassName(calendarEvent.getClassName());
         dto.setType(calendarEvent.getType());
+        dto.setContentGenerated(calendarEvent.getContentGenerated());
+        dto.setPracticeProblems(calendarEvent.getPracticeProblems());
+        dto.setExamFor(calendarEvent.getExamFor());
         return dto;
     }
 
@@ -94,9 +93,12 @@ public class CalendarEventServiceImpl implements CalendarEventService {
         calendarEvent.setTitle(calendarEventDto.getTitle());
         calendarEvent.setStartDate(calendarEventDto.getStartDate());
         calendarEvent.setEndDate(calendarEventDto.getEndDate());
-        calendarEvent.setClassContent(calendarEventDto.getClassContent());
+        calendarEvent.setContent(calendarEventDto.getContent());
         calendarEvent.setClassName(calendarEventDto.getClassName());
         calendarEvent.setType(calendarEventDto.getType());
+        calendarEvent.setContentGenerated(calendarEventDto.getContentGenerated());
+        calendarEvent.setPracticeProblems(calendarEventDto.getPracticeProblems());
+        calendarEvent.setExamFor(calendarEventDto.getExamFor());
         return calendarEvent;
     }
 }

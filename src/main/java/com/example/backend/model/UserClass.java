@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class UserClass {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String className;
+    
     private String classContent;
 
     @ManyToOne(fetch = FetchType.LAZY)

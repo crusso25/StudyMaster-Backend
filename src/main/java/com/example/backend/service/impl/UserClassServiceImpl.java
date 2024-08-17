@@ -28,20 +28,11 @@ public class UserClassServiceImpl implements UserClassService {
     private UserRepository userRepository;
 
     @Override
-    public UserClassResponse getAllUserClasses(int userId, int pageNo, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
-        Page<UserClass> userClassPage = userClassRepository.findByUserId(userId, pageable);
-        List<UserClassDto> content = userClassPage.getContent().stream().map(this::mapToDto).collect(Collectors.toList());
+    public UserClassResponse getAllUserClasses(int userId) {
+        List<UserClass> classes = userClassRepository.findByUserId(userId);
+        List<UserClassDto> classDtos = classes.stream().map(this::mapToDto).collect(Collectors.toList());
 
-        UserClassResponse userClassResponse = new UserClassResponse();
-        userClassResponse.setContent(content);
-        userClassResponse.setPageNo(userClassPage.getNumber());
-        userClassResponse.setPageSize(userClassPage.getSize());
-        userClassResponse.setTotalElements(userClassPage.getTotalElements());
-        userClassResponse.setTotalPages(userClassPage.getTotalPages());
-        userClassResponse.setLast(userClassPage.isLast());
-
-        return userClassResponse;
+        return new UserClassResponse(classDtos);
     }
 
     @Override

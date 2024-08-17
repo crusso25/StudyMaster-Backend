@@ -55,22 +55,35 @@ public class AuthController {
                         loginDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtGenerator.generateToken(authentication);
-        return new ResponseEntity<>(new AuthResponseDto(token), HttpStatus.OK);
+        UserEntity user = userRepository.findByUsername(loginDto.getUsername()).orElseThrow(
+                () -> new RuntimeException("User not found"));
+
+        AuthResponseDto response = new AuthResponseDto(token, user.getId(), user.getUsername());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
+    public ResponseEntity<AuthResponseDto> register(@RequestBody RegisterDto registerDto) {
         if (userRepository.existsByUsername(registerDto.getUsername())) {
-            return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
         UserEntity user = new UserEntity();
         user.setUsername(registerDto.getUsername());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
-        
+
         Role roles = roleRepository.findByName("USER").get();
         user.setRoles(Collections.singletonList(roles));
 
         userRepository.save(user);
-        return new ResponseEntity<>("User registered!", HttpStatus.OK);
+        
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        registerDto.getUsername(),
+                        registerDto.getPassword()));
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        String token = jwtGenerator.generateToken(authentication);
+
+        AuthResponseDto response = new AuthResponseDto(token, user.getId(), user.getUsername());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

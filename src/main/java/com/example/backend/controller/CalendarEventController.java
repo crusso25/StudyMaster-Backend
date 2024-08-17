@@ -27,10 +27,11 @@ public class CalendarEventController {
 
     @GetMapping("calendarevents")
     public ResponseEntity<CalendarEventResponse> getCalendarEvents(
-            @PathVariable("userId") int userId,
-            @RequestParam(value = "pageNo", defaultValue = "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize) {
-        return new ResponseEntity<>(calendarEventService.getAllCalendarEvents(userId, pageNo, pageSize), HttpStatus.OK);
+            @PathVariable("userId") int userId) {
+
+        CalendarEventResponse response = calendarEventService.getAllCalendarEvents(userId);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("calendarevents/{calendarId}")
