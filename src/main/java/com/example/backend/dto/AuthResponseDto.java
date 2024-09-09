@@ -8,10 +8,12 @@ public class AuthResponseDto {
     private String tokenType = "Bearer ";
     private int userId;
     private String username;
+    private String email;
 
-    public AuthResponseDto(String accessToken, int userId, String username) {
+    public AuthResponseDto(String accessToken, int userId, String username, String email) {
         this.accessToken = accessToken;
         this.userId = userId;
         this.username = username;
+        this.email = email;
     }
 }
